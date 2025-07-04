@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 const App = () => {
-  const [users, setUser] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState(false);
@@ -14,13 +14,20 @@ const App = () => {
     setError(false);
     setLoading(true);
     try {
+      console.log("Fetching users...");
       const res = await fetch("https://jsonplaceholder.typicode.com/users");
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
       const data = await res.json();
-      setUser(data);
-      setTimeout(() => setLoading(false), 800);
-    } catch (error) {
-      console.log("Error in Fetching", error);
+      console.log("Fetched users:", data);
+      setUsers(data);
+    } catch (err) {
+      console.error("Error in Fetching:", err);
       setError(true);
+    } finally {
       setLoading(false);
     }
   };
@@ -29,6 +36,7 @@ const App = () => {
     fetchUsers();
   }, []);
 
+  // Sorting and filtering
   const SortedUsers = [...users].sort((a, b) =>
     sortOrder === 'asc'
       ? a.name.localeCompare(b.name)
@@ -39,7 +47,7 @@ const App = () => {
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Pagination Logic
+  // Pagination logic
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
   const startIndex = (currentPage - 1) * usersPerPage;
   const currentUsers = filteredUsers.slice(startIndex, startIndex + usersPerPage);
@@ -47,13 +55,12 @@ const App = () => {
   const handlePrev = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
   const handleNext = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 
-  // Reset page if filter changes
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, sortOrder]);
 
   return (
-    <div className="p-10 m-10 shadow-xl">
+    <div className="p-10 m-10 shadow-xl max-w-4xl mx-auto">
       <h1 className="font-extrabold text-3xl mb-4">User List</h1>
 
       <div className="flex gap-4 mb-6">
@@ -76,7 +83,7 @@ const App = () => {
       </div>
 
       {loading && (
-        <div className="flex justify-center items-center py-10 animate-fade-in">
+        <div className="flex justify-center items-center py-10">
           <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500 border-solid"></div>
           <p className="ml-4 text-gray-600 font-semibold">Loading Users...</p>
         </div>

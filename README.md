@@ -4,6 +4,8 @@ Implemented the UseEffect function to fetch the content from open API and then i
 ---
 
 ---
+# Demo / Preview 
+![Demo Screenshot](./image.png)
 
 ## Tech Stack
 
@@ -19,13 +21,13 @@ Implemented the UseEffect function to fetch the content from open API and then i
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/yourproject.git
+git clone https://github.com/adityakalra007/URLFetch-and-Search
 
 # Move into the project folder
-cd yourproject
+cd URLFetch-and-Search
 
 # Install dependencies
-npm install  # or pip install -r requirements.txt
+npm install  
 
 # Start the project
-npm start  # or python app.py
+npm start  
